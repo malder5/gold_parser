@@ -121,7 +121,7 @@ def gold9999():
     else:
         spred = ''
     text = f'\n9999 Держава Золото {",".join(result)} \nСпред = {spred}%'
-    date_time =datetime.datetime.now()
+    date_time = datetime.datetime.now()
     db.add_history(dealer='9999 Держава Золото', datetime=str(date_time), buy=float(prices[0]), sell=float(prices[1]))
     return text
 
@@ -143,7 +143,7 @@ def zolotoy_dvor():
         html = get_html_ph(url=url)
         result, spred = parse_zolotoy_dvor(html)
         text = f'\nЗолотой двор Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        date_time =datetime.datetime.now()
+        date_time = datetime.datetime.now()
         db.add_history(dealer='Золотой двор', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
     except:
         text = f'\nЗолотой двор сайт не дотупен'
@@ -178,7 +178,7 @@ def zolotoy_zapas():
 
         result, spred = parse_zolotoy_zapas(html)
         text = f'\nЗолотой Запас Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        date_time =datetime.datetime.now()
+        date_time = datetime.datetime.now()
         db.add_history(dealer='Золотой запас', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
 
     except:
@@ -210,8 +210,9 @@ def zoloto_md():
         html = get_html_ph(url=url)
         result, spred = parse_zoloto_md(html)
         text = f'\nЗолотой монетный двор Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        date_time =datetime.datetime.now()
-        db.add_history(dealer='Золотой монетный двор', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
+        date_time = datetime.datetime.now()
+        db.add_history(dealer='Золотой монетный двор', datetime=str(date_time), buy=float(result[0]),
+                       sell=float(result[1]))
     except:
         text = f'\nЗолотой монетный двор - Сайт недоступен'
 
@@ -221,14 +222,14 @@ def zoloto_md():
 def parse_vtbbank(html):
     soup = BeautifulSoup(html, 'lxml')
     pricies = []
-
-    elems = soup.find_all(class_='coin-price__item')
-    for elem in elems[2:4]:
+    elems = soup.find_all(class_='coin__header')
+    elems = elems[1].find_all(class_='coin-price__item')
+    for elem in elems:
         # print(elem.text.strip().replace('Покупка:', '').replace('Продажа:', '').replace(' ₽', ''). replace(' ', '').strip())
         pricies.append(elem.text.strip().replace('Покупка:', '').replace('Продажа:', '').replace(' ₽', '').replace(' ',
 
                                                                                                                    '').strip())
-    if len(pricies[0]) > 1 and len(pricies[1]) > 1:
+    if len(pricies[1]) > 1 and len(pricies[0]) > 1:
 
         spred = (float(pricies[0]) / (float(pricies[1])) - 1) * 100
         spred = '{0:.2f}'.format(spred)
@@ -243,7 +244,7 @@ def vtbbank():
         html = get_html_ph(url=url)
         result, spred = parse_vtbbank(html)
         text = f'\nВТБ банк Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        date_time =datetime.datetime.now()
+        date_time = datetime.datetime.now()
         db.add_history(dealer='ВТБ Банк', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
     except:
         text = f'\nВТБ банк - сайт недоступен'
@@ -257,7 +258,7 @@ def get_html_ph(url):
     # browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     browser.get(url)
     browser.implicitly_wait(10)
-    # time.sleep(3)
+    time.sleep(3)
     html = browser.page_source
     browser.quit()
     return html
@@ -300,8 +301,8 @@ def main():
     data.append((zoloto_md()))
     data.append(vtbbank())
     import logging
-    # logging.info('\n'.join(data))
-    # print('\n'.join(data))
+    logging.info('\n'.join(data))
+    print('\n'.join(data))
     # time.sleep(5)
 
 
