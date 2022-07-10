@@ -10,7 +10,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from sqlite import Database
 
 
-
 def get_html(url):
     user_agent = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
@@ -122,8 +121,8 @@ def gold9999():
     else:
         spred = ''
     text = f'\n9999 Держава Золото {",".join(result)} \nСпред = {spred}%'
-    time = datetime.datetime.now()
-    db.add_history(dealer='9999 Держава Золото', datetime=str(time), buy=float(prices[0]), sell = float(prices[1]))
+    date_time =datetime.datetime.now()
+    db.add_history(dealer='9999 Держава Золото', datetime=str(date_time), buy=float(prices[0]), sell=float(prices[1]))
     return text
 
 
@@ -144,11 +143,10 @@ def zolotoy_dvor():
         html = get_html_ph(url=url)
         result, spred = parse_zolotoy_dvor(html)
         text = f'\nЗолотой двор Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        time = datetime.datetime.now()
-        db.add_history(dealer='Золотой двор', datetime=str(time), buy=float(result[0]), sell=float(result[1]))
+        date_time =datetime.datetime.now()
+        db.add_history(dealer='Золотой двор', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
     except:
         text = f'\nЗолотой двор сайт не дотупен'
-
 
     return text
 
@@ -180,8 +178,8 @@ def zolotoy_zapas():
 
         result, spred = parse_zolotoy_zapas(html)
         text = f'\nЗолотой Запас Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        time = datetime.datetime.now()
-        db.add_history(dealer='Золотой запас', datetime=str(time), buy=float(result[0]), sell=float(result[1]))
+        date_time =datetime.datetime.now()
+        db.add_history(dealer='Золотой запас', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
 
     except:
         text = f'\nЗолотой Запас Сайт не доступен'
@@ -212,8 +210,8 @@ def zoloto_md():
         html = get_html_ph(url=url)
         result, spred = parse_zoloto_md(html)
         text = f'\nЗолотой монетный двор Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        time = datetime.datetime.now()
-        db.add_history(dealer='Золотой монетный двор', datetime=str(time), buy=float(result[0]), sell=float(result[1]))
+        date_time =datetime.datetime.now()
+        db.add_history(dealer='Золотой монетный двор', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
     except:
         text = f'\nЗолотой монетный двор - Сайт недоступен'
 
@@ -241,21 +239,18 @@ def parse_vtbbank(html):
 
 def vtbbank():
     url = 'https://www.vfbank.ru/fizicheskim-licam/monety/'
-
     try:
         html = get_html_ph(url=url)
-
         result, spred = parse_vtbbank(html)
         text = f'\nВТБ банк Покупка/продажа {"/".join(result)} \nСпред = {spred}%'
-        time = datetime.datetime.now()
-        db.add_history(dealer='ВТБ Банк', datetime=str(time), buy=float(result[0]), sell=float(result[1]))
+        date_time =datetime.datetime.now()
+        db.add_history(dealer='ВТБ Банк', datetime=str(date_time), buy=float(result[0]), sell=float(result[1]))
     except:
         text = f'\nВТБ банк - сайт недоступен'
     return text
 
 
 def get_html_ph(url):
-
     # options = Options()
     # options.add_argument('--headless')
     browser = webdriver.Remote("http://localhost:4444/wd/hub", desired_capabilities={"browserName": "chrome"})
@@ -293,7 +288,7 @@ def parse_sber(html):
 
 def main():
     # time.sleep(30)
-    for i in range(1,15):
+    for i in range(1, 15):
         try:
             r = requests.get('http://localhost:4444/wd/hub')
         except:
@@ -308,6 +303,7 @@ def main():
     # logging.info('\n'.join(data))
     # print('\n'.join(data))
     # time.sleep(5)
+
 
 if __name__ == '__main__':
     db = Database()
