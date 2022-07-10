@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:3.141.59
+    container_name: selenium_server_works
+    volumes:
+      - ./data:/data
+    ports:
+      - "4444:4444"
+    logging:
+      driver: none
+
+  gold:
+    build: ./parser/
+    image: gold
+    container_name: gold_parser
+    network_mode: "host"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - selenium
+
+#    healthcheck:
+#      test: curl --fail -s http://localhost:4444/ || exit 1
+#      interval: 1m30s
+#      timeout: 10s
+#      retries: 6
+
+#networks:
+#  botnet:
+#    driver: bridge
+
